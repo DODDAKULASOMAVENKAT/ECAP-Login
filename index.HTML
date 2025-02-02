@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .login-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px gray;
+            width: 300px;
+            text-align: center;
+        }
+        input, select, button {
+            width: 90%;
+            padding: 8px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .toggle-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<button class="toggle-btn" onclick="toggleLogin()">Switch to Staff Login</button>
+
+<div class="login-container" id="login-container">
+    <!-- Student Login Form -->
+    <h2 id="login-heading">Student Login</h2>
+    <input type="number" id="rollno" placeholder="Enter Roll No" min="1" max="6">
+    <select id="branch">
+        <option value="">Select Branch</option>
+        <option value="ECE">ECE</option>
+        <option value="CIVIL">CIVIL</option>
+        <option value="MECH">MECH</option>
+        <option value="CSE">CSE</option>
+        <option value="AIDS">AIDS</option>
+    </select>
+    <input type="password" id="password" placeholder="Enter Password">
+    <button onclick="studentLogin()">Login</button>
+    <p id="error" style="color: red;"></p>
+</div>
+
+<!-- Staff Login Form (Initially Hidden) -->
+<div class="login-container" id="staff-login-container" style="display: none;">
+    <h2 id="staff-login-heading">Staff Login</h2>
+    <select id="staffId">
+        <option value="">Select Staff ID</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+    </select>
+    <select id="branch-staff">
+        <option value="">Select Branch</option>
+        <option value="ECE">ECE</option>
+        <option value="CSE">CSE</option>
+        <option value="MECH">MECH</option>
+        <option value="CIVIL">CIVIL</option>
+        <option value="AIDS">AIDS</option>
+    </select>
+    <input type="password" id="staff-password" placeholder="Enter Password">
+    <button onclick="staffLogin()">Login</button>
+    <p id="staff-error" style="color: red;"></p>
+</div>
+
+<script>
+    function toggleLogin() {
+        let loginContainer = document.getElementById("login-container");
+        let staffLoginContainer = document.getElementById("staff-login-container");
+        let toggleBtn = document.querySelector(".toggle-btn");
+
+        if (staffLoginContainer.style.display === "none") {
+            loginContainer.style.display = "none";
+            staffLoginContainer.style.display = "block";
+            toggleBtn.innerText = "Switch to Student Login";
+            document.getElementById("login-heading").innerText = "Staff Login";
+        } else {
+            loginContainer.style.display = "block";
+            staffLoginContainer.style.display = "none";
+            toggleBtn.innerText = "Switch to Staff Login";
+            document.getElementById("login-heading").innerText = "Student Login";
+        }
+    }
+
+    function studentLogin() {
+        let rollno = document.getElementById("rollno").value;
+        let branch = document.getElementById("branch").value;
+        let password = document.getElementById("password").value;
+        let error = document.getElementById("error");
+
+        if (rollno < 1 || rollno > 6 || branch === "") {
+            error.innerText = "Invalid Roll No or Branch!";
+            return;
+        }
+
+        let correctPassword = branch + rollno;
+
+        if (password === correctPassword) {
+            localStorage.setItem("userRollNo", rollno);
+            localStorage.setItem("userBranch", branch);
+            window.location.href = "dashboard.html"; // Student Dashboard
+        } else {
+            error.innerText = "Incorrect Password!";
+        }
+    }
+
+    function staffLogin() {
+        let staffId = document.getElementById("staffId").value;
+        let branch = document.getElementById("branch-staff").value;
+        let password = document.getElementById("staff-password").value;
+        let error = document.getElementById("staff-error");
+
+        if (!staffId || !branch) {
+            error.innerText = "Please select both Staff ID and Branch!";
+            return;
+        }
+
+        let correctPassword = branch + staffId.padStart(2, '0'); // Ensure staff ID is 2 digits (e.g., "01" for staff 1)
+
+        if (password === correctPassword) {
+            window.location.href = "staff-dashboard.html"; // Staff Dashboard
+        } else {
+            error.innerText = "Incorrect Password!";
+        }
+    }
+</script>
+
+</body>
+</html>

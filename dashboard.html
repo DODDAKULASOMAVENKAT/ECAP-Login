@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            transition: background 0.3s, color 0.3s;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0px 0px 10px gray;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        td {
+            background-color: #f9f9f9;
+        }
+        .dark-mode {
+            background-color: #121212;
+            color: white;
+        }
+        .dark-mode table {
+            background: #1e1e1e;
+            color: white;
+        }
+        .dark-mode th {
+            background-color: #333;
+        }
+        .dark-mode td {
+            background-color: #2c2c2c;
+        }
+        .toggle-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<button class="toggle-btn" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+
+<h2>Welcome to Student Dashboard</h2>
+<h3>Roll No: <span id="rollNo"></span> | Branch: <span id="branchName"></span></h3>
+
+<table>
+    <tr>
+        <th>Email</th>
+        <td id="email"></td>
+    </tr>
+    <tr>
+        <th>Parent Name</th>
+        <td id="parent"></td>
+    </tr>
+    <tr>
+        <th>10th CGPA</th>
+        <td id="cgpa10"></td>
+    </tr>
+    <tr>
+        <th>Intermediate CGPA</th>
+        <td id="cgpa12"></td>
+    </tr>
+</table>
+
+<h3>Semester-wise CGPA</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Semester</th>
+            <th>CGPA</th>
+        </tr>
+    </thead>
+    <tbody id="cgpaTable"></tbody>
+</table>
+
+<h3>Attendance</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Month</th>
+            <th>Attendance (%)</th>
+        </tr>
+    </thead>
+    <tbody id="attendanceTable"></tbody>
+</table>
+
+<h3>Timetable</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Day</th>
+            <th>Subject</th>
+        </tr>
+    </thead>
+    <tbody id="timetable"></tbody>
+</table>
+
+<script>
+    let rollNo = localStorage.getItem("userRollNo");
+    let branch = localStorage.getItem("userBranch");
+
+    document.getElementById("rollNo").innerText = rollNo;
+    document.getElementById("branchName").innerText = branch;
+
+    function generateEmail(rollNo, branch) {
+        let domains = ["gmail.com", "yahoo.com", "outlook.com"];
+        let randomDomain = domains[Math.floor(Math.random() * domains.length)];
+        return `student${rollNo}@${branch.toLowerCase()}.${randomDomain}`;
+    }
+
+    function generateRandomCGPA() {
+        return (Math.random() * (10 - 6) + 6).toFixed(2);
+    }
+
+    function generateRandomAttendance() {
+        return (Math.random() * (100 - 60) + 60).toFixed(2);
+    }
+
+    let parentNames = ["Rajesh Kumar", "Suresh Reddy", "Anitha Devi", "Ravi Prasad", "Madhavi Latha", "Venkatesh Rao"];
+
+    let studentNames = [
+        "Jawhar", "Soma", "Karthik", "Prince", "Harish", "Vamsi", "Sai", "Ganesh", "Dinesh", 
+        "Ram", "Sam", "Jam", "Prashanth", "Krishna", "Sudha", "Gopi", "Salaaar", "Varadha", 
+        "Bahubali", "Kalyan", "Babu", "Mahesh", "Pawan", "Chiranjeevi", "Ram Charan", "BhAAi", "Jai"
+    ];
+
+    // Randomly assign a name to the student
+    let studentName = studentNames[Math.floor(Math.random() * studentNames.length)];
+
+    let studentEmail = generateEmail(rollNo, branch);
+    let studentParent = parentNames[Math.floor(Math.random() * parentNames.length)];
+    let studentCGPA10 = generateRandomCGPA();
+    let studentCGPA12 = generateRandomCGPA();
+
+    document.getElementById("email").innerText = studentEmail;
+    document.getElementById("parent").innerText = studentParent;
+    document.getElementById("cgpa10").innerText = studentCGPA10;
+    document.getElementById("cgpa12").innerText = studentCGPA12;
+
+    let cgpaTableBody = document.getElementById("cgpaTable");
+    for (let sem = 1; sem <= 8; sem++) {
+        let row = document.createElement("tr");
+        let cgpaValue = sem === 8 ? "Result Not Declared" : generateRandomCGPA();
+        row.innerHTML = `<td>Semester ${sem}</td><td>${cgpaValue}</td>`;
+        cgpaTableBody.appendChild(row);
+    }
+
+    let attendanceTableBody = document.getElementById("attendanceTable");
+    let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    months.forEach((month) => {
+        let row = document.createElement("tr");
+        row.innerHTML = `<td>${month}</td><td>${generateRandomAttendance()}%</td>`;
+        attendanceTableBody.appendChild(row);
+    });
+
+    let subjects = {
+        "ECE": ["Circuits", "Electromagnetics", "DSP", "Control Systems"],
+        "CIVIL": ["Surveying", "Strength of Materials", "Hydraulics", "Transportation Engineering"],
+        "MECH": ["Thermodynamics", "Fluid Mechanics", "Manufacturing", "Automobile Engineering"],
+        "CSE": ["Data Structures", "Algorithms", "OS", "DBMS"],
+        "AIDS": ["AI", "Machine Learning", "Data Analytics", "Cybersecurity"]
+    };
+    let timetableSubjects = subjects[branch];
+    let timetableBody = document.getElementById("timetable");
+    let days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+
+    days.forEach((day, index) => {
+        let row = document.createElement("tr");
+        row.innerHTML = `<td>${day}</td><td>${timetableSubjects[index % timetableSubjects.length]}</td>`;
+        timetableBody.appendChild(row);
+    });
+
+    function toggleDarkMode() {
+        let body = document.body;
+        let btn = document.querySelector(".toggle-btn");
+
+        body.classList.toggle("dark-mode");
+
+        if (body.classList.contains("dark-mode")) {
+            localStorage.setItem("theme", "dark");
+            btn.innerText = "☀️ Light Mode";
+        } else {
+            localStorage.setItem("theme", "light");
+            btn.innerText = "🌙 Dark Mode";
+        }
+    }
+
+    window.onload = function() {
+        if (localStorage.getItem("theme") === "dark") {
+            document.body.classList.add("dark-mode");
+            document.querySelector(".toggle-btn").innerText = "☀️ Light Mode";
+        }
+    };
+</script>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Details</title>
+</head>
+<body>
+    <h2>Student Details</h2>
+    <div id="studentDetails"></div>
+
+    <script>
+        const studentsDetails = {
+            "Jawhar": { rollNo: "1001", branch: "ECE", parent: "Rajesh Kumar", cgpa10: "9.2", cgpa12: "9.5" },
+            "Soma": { rollNo: "1002", branch: "ECE", parent: "Suresh Reddy", cgpa10: "8.7", cgpa12: "9.0" },
+            // Add other student details in the same format...
+        };
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const studentName = urlParams.get('student');
+
+        if (studentName && studentsDetails[studentName]) {
+            const student = studentsDetails[studentName];
+            const detailsDiv = document.getElementById("studentDetails");
+
+            detailsDiv.innerHTML = `
+                <p><strong>Name:</strong> ${studentName}</p>
+                <p><strong>Roll No:</strong> ${student.rollNo}</p>
+                <p><strong>Branch:</strong> ${student.branch}</p>
+                <p><strong>Parent Name:</strong> ${student.parent}</p>
+                <p><strong>10th CGPA:</strong> ${student.cgpa10}</p>
+                <p><strong>Intermediate CGPA:</strong> ${student.cgpa12}</p>
+            `;
+        } else {
+            document.getElementById("studentDetails").innerText = "Student details not found.";
+        }
+    </script>
+</body>
+</html>
