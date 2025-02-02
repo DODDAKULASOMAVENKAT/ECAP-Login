@@ -1,16 +1,16 @@
 Description:
 Developed a web-based Student & Staff Management System to efficiently manage student and staff login functionalities, dynamically generate student details, and provide staff with controlled access to student information.
 
-<strong>Frontend</strong>:
+<strong>Frontend:</strong>
 - *HTML* – Used to structure the web pages (Login Page, Student Dashboard, and Staff Dashboard).  
 - *CSS* – Used for styling, including table designs, dark mode functionality, and layout customization.  
-- *JavaScript* – Used for:  
+- <strong>JavaScript</strong> – Used for:  
   - Handling login authentication for students and staff.  
   - Storing and retrieving user data via localStorage.  
   - Dynamically generating student details such as CGPA, attendance, and email.  
   - Implementing the dark mode toggle.  
 
-*Data Handling (Without Backend Database):*  
+<strong>Data Handling</strong> *(Without Backend Database):*  
 - *JavaScript Local Storage* – Used to temporarily store student and staff login details.  
 - *Random Data Generation* – Used for:  
   - Assigning random student names from a predefined list.  
